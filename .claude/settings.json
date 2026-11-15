@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm test:*)", "Bash(pnpm typecheck:*)", "Bash(pnpm lint:*)",
+      "Bash(pnpm check:*)", "Bash(pnpm format:*)",
+      "Bash(pnpm db:generate:*)", "Bash(pnpm db:migrate:*)", "Bash(pnpm db:seed:*)",
+      "Bash(pnpm --filter api test:*)", "Bash(pnpm --filter web test:*)",
+      "Bash(pnpm --filter api exec vitest:*)", "Bash(pnpm --filter web exec vitest:*)",
+      "Bash(curl -s localhost:*)",
+      "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(docker compose ps:*)", "Bash(docker compose logs:*)"
+    ],
+    "deny": ["Bash(git push:*)", "Bash(rm -rf:*)", "Read(./.env)"]
+  }
+}
