@@ -39,8 +39,32 @@ The api tests use the separate `app_test` database. The global setup migrates it
 - TypeScript is strict with `noUncheckedIndexedAccess`. Don't use `any`, and don't use `!` unless the invariant is obvious.
 - Write or update tests alongside each behaviour change, and run `pnpm check` before calling a task done.
 
+## Domain: UK work-visa sponsorship
+
+Domain terms to use in code, schemas and UI copy. The task brief always wins: if it conflicts with the context below, follow the brief and point out the difference.
+
+| Term                             | Meaning                                                                                                                                                                                                                                                                           |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sponsor / sponsor licence        | An employer licensed by the Home Office to employ overseas workers. One organisation can hold several licences, each covering several **sites** (work locations).                                                                                                                 |
+| Sponsored worker                 | An employee whose visa depends on the sponsor. Key fields: role, SOC code, salary, weekly hours, work site, visa expiry.                                                                                                                                                          |
+| CoS (Certificate of Sponsorship) | An electronic record the sponsor assigns to a worker for a specific role. The worker then applies for a visa using it. It can be _defined_ (applying from outside the UK) or _undefined_ (applying from inside the UK).                                                           |
+| SOC code                         | The occupation code for the role. It sets the **going rate**, which is the minimum salary for that occupation.                                                                                                                                                                    |
+| Salary threshold                 | A worker must be paid at least the higher of the general threshold and the going rate (lower rates exist for new entrants and Immigration Salary List roles), pro-rated by hours. Since April 2026 the threshold must be met **in every pay period**, not averaged over the year. |
+| SMS (Sponsor Management System)  | The Home Office portal where sponsors assign CoS and submit reports.                                                                                                                                                                                                              |
+| Reportable change                | A worker change the sponsor must report on the SMS, e.g. a change of work location, a salary cut, resignation or dismissal, failure to start, or more than 10 consecutive working days of unauthorised absence.                                                                   |
+| Reporting deadline               | Usually **10 working days** after the event for worker changes and 20 working days for organisation changes. Working days exclude weekends and UK bank holidays. Compute dates as calendar dates in Europe/London, not as timestamps.                                             |
+| Authorising Officer (AO)         | The senior person accountable for the licence. Approves CoS assignment and submissions.                                                                                                                                                                                           |
+| Immigration adviser              | A regulated (IAA) adviser who reviews a case before anything is submitted.                                                                                                                                                                                                        |
+| Right to work (RTW) check        | The check that a worker may legally work in the UK. Records must be kept, and some checks need follow-ups before a visa expires.                                                                                                                                                  |
+| Appendix D                       | The Home Office list of records a sponsor must keep. It is the basis for compliance audits.                                                                                                                                                                                       |
+| Compliance action                | Downgrade, suspension or revocation of a licence. Revocation puts every sponsored worker's visa at risk, which is why deadlines, owners and audit trails matter.                                                                                                                  |
+
+Modelling defaults: store money as integer pence and calendar dates as `date` columns. Give every obligation an owner and a due date, and record every state change in an audit trail (actor, action, timestamp).
+
 ## Working style
 
 - Before writing code for any non-trivial change, outline a short plan and wait for confirmation.
 - Keep each change focused. Don't refactor unrelated code or add dependencies without asking.
 - If requirements are ambiguous, ask rather than assume.
+- For rule or business-logic work, use `/tdd`: write a failing test first, then implement. Before declaring a task done, use `/review`.
+- A PostToolUse hook runs Prettier and `eslint --fix` on every file you edit, so don't reformat files by hand.
