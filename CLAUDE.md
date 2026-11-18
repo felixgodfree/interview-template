@@ -66,5 +66,6 @@ Modelling defaults: store money as integer pence and calendar dates as `date` co
 - Before writing code for any non-trivial change, outline a short plan and wait for confirmation.
 - Keep each change focused. Don't refactor unrelated code or add dependencies without asking.
 - If requirements are ambiguous, ask rather than assume.
+- Never commit. When a step is green, stop and give me a short summary of the diff (files, what changed, anything I should check) so I can review and commit it myself.
 - For rule or business-logic work, use `/tdd`: write a failing test first, then implement. Before declaring a task done, use `/review`.
 - A PostToolUse hook runs Prettier and `eslint --fix` on every file you edit, so don't reformat files by hand.
